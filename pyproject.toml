@@ -1,0 +1,28 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "macro-indicators"
+version = "0.0.1"
+description = "Python client for the Macroeconomy Indicators API"
+readme = "README.md"
+requires-python = ">=3.9"
+
+authors = [
+  { name = "Pantarbengt"}
+]
+
+dependencies = [
+  "requests>=2.31"
+]
+
+keywords = ["economics", "macro", "api"]
+
+[project.urls]
+Homepage = "https://github.com/Pantarbengt/macro-indicators"
+Source = "https://github.com/Pantarbengt/macro-indicators"
+Issues = "https://github.com/Pantarbengt/macro-indicators/issues"
+
+[tool.hatch.build]
+packages = ["src/macro_indicators"]

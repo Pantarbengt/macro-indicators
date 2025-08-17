@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "macro-indicators"
 version = "0.0.1"
 description = "Python client for the Macroeconomy Indicators API"
-readme = "README.md"
+readme = "README_PYPI.md"
 requires-python = ">=3.9"
 license = { text = "MIT" }
 

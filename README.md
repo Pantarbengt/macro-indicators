@@ -2,9 +2,9 @@
 
 A tiny Python client for the **Macroeconomy Indicators API** running on Fly.io.
 
-- **No dependencies** beyond `requests`  
-- **Function-based API** (no classes)  
-- **Clean error handling** that mirrors the server’s `detail` messages  
+- **No dependencies** beyond `requests`
+- **Function-based API** (no classes)
+- **Clean error handling** that mirrors the server’s `detail` messages
 
 > Base URL: `https://macro-indicators.fly.dev`
 
@@ -25,6 +25,20 @@ git clone https://github.com/Pantarbengt/macro-indicators.git
 cd macro-indicators
 pip install -e .
 ```
+
+---
+
+## About the data
+
+This library wraps the **Macroeconomy Indicators API**, which serves curated data from the [World Bank Open Data](https://data.worldbank.org/).
+
+- **Indicators**: 10 of the most common and important macroeconomic indicators were selected, including GDP, inflation, unemployment, money supply (M2), debt-to-GDP, and more.
+- **Coverage**: ~180 countries (all countries with available World Bank data).
+- **Frequency**: Annual data (1 value per year).
+- **Range**: Data available from **year 2000 onwards**.
+- **Updates**: Monthly snapshots from the World Bank.
+
+The purpose of this library is to make accessing macroeconomic data as simple as possible — without needing to query the full World Bank database.
 
 ---
 
@@ -60,7 +74,7 @@ print("Values:", data["values"])
 
 ## Examples
 
-### `root()`
+### root()
 
 ```python
 from macro_indicators import root
@@ -68,7 +82,7 @@ root()
 # {"message": "Welcome to the Macroeconomy Indicators API"}
 ```
 
-### `get_country_codes()`
+### get_country_codes()
 
 ```python
 from macro_indicators import get_country_codes
@@ -76,7 +90,7 @@ get_country_codes()[:5]
 # ["AFG", "ALB", "DZA", "AND", "AGO", "..."]
 ```
 
-### `get_countries_with_names()`
+### get_countries_with_names()
 
 ```python
 from macro_indicators import get_countries_with_names
@@ -85,7 +99,7 @@ list(d.items())[:3]
 # [["AFG", "Afghanistan"], ["ALB", "Albania"], ["DZA", "Algeria"]]
 ```
 
-### `get_indicators()`
+### get_indicators()
 
 ```python
 from macro_indicators import get_indicators
@@ -95,7 +109,7 @@ inds[0]
 #  "description": "Broad money (M2), current local currency units", "unit": "LCU"}
 ```
 
-### `get_country_data()`
+### get_country_data()
 
 ```python
 from macro_indicators import get_country_data
@@ -112,11 +126,11 @@ resp["values"][:3]
 
 ## Error handling
 
-This client raises typed exceptions and forwards the server’s `detail`:
+This client raises typed exceptions and forwards the server’s detail messages:
 
-- `BadRequest` (400): invalid parameter bounds (e.g. years)  
-- `NotFound` (404): missing country or indicator  
-- `MacroAPIError`: other HTTP/network errors; includes `status_code` when available  
+- `BadRequest (400)`: invalid parameter bounds (e.g. years out of range)
+- `NotFound (404)`: missing country or indicator
+- `MacroAPIError`: other HTTP/network errors; includes `status_code` when available
 
 ```python
 from macro_indicators import get_country_data, NotFound, BadRequest
@@ -126,25 +140,27 @@ try:
     get_country_data("AFG", "NO_SUCH_INDICATOR", 2010, 2015)
 except NotFound as e:
     print("NotFound:", e, e.status_code)
+# NotFound: Indicator not found 404
 
 # 400: bad year range
 try:
     get_country_data("SWE", "CPI", 1990, 1995)
 except BadRequest as e:
     print("BadRequest:", e, e.status_code)
+# BadRequest: start_year must be >= 2000 400
 ```
 
 ---
 
 ## API reference
 
-- `root() -> dict`  
-- `get_country_codes() -> list[str]`  
-- `get_countries_with_names() -> dict[str, str]`  
-- `get_indicators() -> list[dict]` (each item has `name`, `code`, `description`, `unit`)  
-- `get_country_data(country_code: str, indicator: str, start_year: int, end_year: int) -> dict`  
+- `root() -> dict`
+- `get_country_codes() -> list[str]`
+- `get_countries_with_names() -> dict[str, str]`
+- `get_indicators() -> list[dict]` (each item has name, code, description, unit)
+- `get_country_data(country_code: str, indicator: str, start_year: int, end_year: int) -> dict`
 
-Return from `get_country_data`:
+Example return from `get_country_data`:
 
 ```json
 {
@@ -162,11 +178,15 @@ Return from `get_country_data`:
 
 ## Development
 
-```bash
-# install in editable mode
-pip install -e .
+Install in editable mode:
 
-# quick manual tests
+```bash
+pip install -e .
+```
+
+Quick manual test:
+
+```bash
 python - << "PY"
 from macro_indicators import root, get_indicators, get_country_data
 print(root())
@@ -175,16 +195,3 @@ print("Using indicator:", ind)
 print(get_country_data("SWE", ind, 2010, 2015)["years"])
 PY
 ```
-
----
-
-## License
-
-TBD. Consider adding an OSI-approved license (MIT, Apache-2.0) before publishing to PyPI.
-
----
-
-## Links
-
-- API docs: [https://macro-indicators.fly.dev/docs](https://macro-indicators.fly.dev/docs)  
-- Issues: [https://github.com/Pantarbengt/macro-indicators/issues](https://github.com/Pantarbengt/macro-indicators/issues)

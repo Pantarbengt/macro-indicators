@@ -25,5 +25,5 @@ Homepage = "https://github.com/Pantarbengt/macro-indicators"
 Source = "https://github.com/Pantarbengt/macro-indicators"
 Issues = "https://github.com/Pantarbengt/macro-indicators/issues"
 
-[tool.hatch.build]
+[tool.hatch.build.targets.wheel]
 packages = ["src/macro_indicators"]
